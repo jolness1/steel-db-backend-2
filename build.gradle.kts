@@ -35,7 +35,7 @@ dependencies {
 }
 
 configure<org.flywaydb.gradle.FlywayExtension> {
-    url = "jdbc:postgresql://localhost:5432/your-database-name"
+    url = "jdbc:postgresql://localhost:5432/postgres"
     user = "postgres"
     password = "password"
     locations = arrayOf("filesystem:src/main/resources/migrations") // Modify this to your migration location
