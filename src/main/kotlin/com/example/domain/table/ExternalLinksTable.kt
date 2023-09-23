@@ -1,14 +1,14 @@
-package com.example.repository.tables
+package com.example.domain.table
 
 import SteelTable
-import com.example.repository.data.ExternalLink
-import java.util.UUID
+import com.example.domain.datamodel.ExternalLink
 import kotlinx.datetime.toKotlinInstant
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.UUIDTable
 import org.jetbrains.exposed.sql.javatime.timestamp
+import java.util.UUID
 
 object ExternalLinkTable : UUIDTable() {
     val createdAt = timestamp("created_at")

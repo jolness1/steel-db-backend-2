@@ -1,12 +1,11 @@
-import com.example.repository.data.Steel
+import com.example.domain.datamodel.Steel
+import kotlinx.datetime.toKotlinInstant
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
-import java.util.UUID
-import kotlinx.datetime.toKotlinInstant
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.UUIDTable
 import org.jetbrains.exposed.sql.javatime.timestamp
-
+import java.util.UUID
 
 object SteelTable : UUIDTable() {
     val createdAt = timestamp("created_at")

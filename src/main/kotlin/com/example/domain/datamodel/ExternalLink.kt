@@ -1,8 +1,8 @@
-package com.example.repository.data
+package com.example.domain.datamodel
 
-import java.util.UUID
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import java.util.UUID
 
 data class ExternalLink(
     val linkedId: UUID,
