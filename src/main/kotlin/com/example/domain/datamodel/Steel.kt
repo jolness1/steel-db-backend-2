@@ -16,5 +16,6 @@ data class Steel(
     val stainless: Int?,
     val toughness: Int?,
     val sharpening: Int?,
-    val particleMetallurgy: Boolean?
+    val particleMetallurgy: Boolean?,
+    val externalLinks: List<ExternalLink>
 )

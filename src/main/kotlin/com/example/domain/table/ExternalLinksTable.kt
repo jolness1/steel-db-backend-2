@@ -26,12 +26,12 @@ class ExternalLinkRecord(id: EntityID<UUID>) : UUIDEntity(id) {
     var isActive by ExternalLinkTable.isActive
 }
 
-fun toDomain(record: ExternalLinkRecord): ExternalLink {
+fun ExternalLinkRecord.toDomain(): ExternalLink {
     return ExternalLink(
-        linkedId = record.id.value,
-        createdAt = record.createdAt.toKotlinInstant(),
-        steelId = record.steelId.value,
-        linkValue = record.linkValue,
-        isActive = record.isActive
+        linkedId = id.value,
+        createdAt = createdAt.toKotlinInstant(),
+        steelId = steelId.value,
+        linkValue = linkValue,
+        isActive = isActive
     )
 }

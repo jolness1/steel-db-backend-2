@@ -1,4 +1,7 @@
 import com.example.domain.datamodel.Steel
+import com.example.domain.table.ExternalLinkRecord
+import com.example.domain.table.ExternalLinkTable
+import com.example.domain.table.toDomain
 import kotlinx.datetime.toKotlinInstant
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
@@ -19,6 +22,7 @@ object SteelTable : UUIDTable() {
     val toughness = integer("toughness").nullable()
     val sharpening = integer("sharpening").nullable()
     val particleMetallurgy = bool("particle_metallurgy").nullable()
+    val externalLinks = reference("external_links", ExternalLinkTable)
 }
 
 class SteelRecord(id: EntityID<UUID>) : UUIDEntity(id) {
@@ -35,21 +39,27 @@ class SteelRecord(id: EntityID<UUID>) : UUIDEntity(id) {
     var toughness by SteelTable.toughness
     var sharpening by SteelTable.sharpening
     var particleMetallurgy by SteelTable.particleMetallurgy
-}
 
-fun toDomain(record: SteelRecord): Steel {
-    return Steel(
-        id = record.id.value,
-        createdAt = record.createdAt.toKotlinInstant(),
-        name = record.name,
-        manufacturer = record.manufacturer,
-        dataSheet = record.dataSheet,
-        history = record.history,
-        description = record.description,
-        edgeRetention = record.edgeRetention,
-        stainless = record.stainless,
-        toughness = record.toughness,
-        sharpening = record.sharpening,
-        particleMetallurgy = record.particleMetallurgy
-    )
+    fun toDomain(): Steel {
+        val externalLinks = externalLinks().map { it.toDomain() }
+        return Steel(
+            id = id.value,
+            createdAt = createdAt.toKotlinInstant(),
+            name = name,
+            manufacturer = manufacturer,
+            dataSheet = dataSheet,
+            history = history,
+            description = description,
+            edgeRetention = edgeRetention,
+            stainless = stainless,
+            toughness = toughness,
+            sharpening = sharpening,
+            particleMetallurgy = particleMetallurgy,
+            externalLinks = externalLinks
+        )
+    }
+
+    private fun externalLinks(): List<ExternalLinkRecord> {
+        return ExternalLinkRecord.find { ExternalLinkTable.steelId eq id }.toList()
+    }
 }
