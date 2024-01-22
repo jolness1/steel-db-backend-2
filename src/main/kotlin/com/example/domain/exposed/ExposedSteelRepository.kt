@@ -11,4 +11,10 @@ class ExposedSteelRepository : SteelRepository {
         return SteelRecord.find { SteelTable.id eq id }
             .firstOrNull()?.toDomain()
     }
+
+    override fun fetchSteelByName(nameQuery: String): List<Steel> {
+        val nameLike = "%$nameQuery%" // Create a pattern for partial matches
+        return SteelRecord.find { SteelTable.name like nameLike }
+            .map { it.toDomain() }
+    }
 }

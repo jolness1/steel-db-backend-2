@@ -8,4 +8,6 @@ interface SteelRepository {
     fun fetchSteelWithExternalLinks(id: UUID): Steel? {
         return null
     }
+
+    fun fetchSteelByName(nameQuery: String): List<Steel>
 }
