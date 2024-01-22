@@ -1,6 +1,8 @@
 package com.example.plugins
 
 import SteelTable
+import com.example.domain.exposed.ExposedSteelRepository
+import com.example.domain.repository.SteelRepository
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
@@ -19,10 +21,16 @@ fun Application.configureRouting() {
 
         get("/steel/{id}") {
             val steelId = call.parameters.getOrFail<UUID>("id")
-            val steel = SteelRecord.find { SteelTable.id eq steelId }
-                .firstOrNull()
-                ?.toDomain() ?: return@get call.respond(HttpStatusCode.NotFound)
+            val steel = ExposedSteelRepository().fetchSteelWithExternalLinks(steelId)
+                ?: return@get call.respond(HttpStatusCode.NotFound)
             call.respond(steel)
         }
+
+        get("/steels/{name}") {
+            val nameQuery = call.request.queryParameters["name"] ?: return@get call.respond(HttpStatusCode.BadRequest)
+            val matchingSteels = ExposedSteelRepository().fetchSteelByName(nameQuery)
+            call.respond(matchingSteels)
+        }
+
     }
 }
