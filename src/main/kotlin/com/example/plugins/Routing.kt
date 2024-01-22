@@ -22,7 +22,6 @@ fun Application.configureRouting() {
             val steel = SteelRecord.find { SteelTable.id eq steelId }
                 .firstOrNull()
                 ?.toDomain() ?: return@get call.respond(HttpStatusCode.NotFound)
-
             call.respond(steel)
         }
     }

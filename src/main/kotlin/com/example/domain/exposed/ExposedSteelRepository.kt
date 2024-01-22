@@ -13,7 +13,7 @@ class ExposedSteelRepository : SteelRepository {
     }
 
     override fun fetchSteelByName(nameQuery: String): List<Steel> {
-        val nameLike = "%$nameQuery%" // Create a pattern for partial matches
+        val nameLike = "%$nameQuery%"
         return SteelRecord.find { SteelTable.name like nameLike }
             .map { it.toDomain() }
     }
