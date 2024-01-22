@@ -10,7 +10,7 @@ class ExposedSteelRepository : SteelRepository {
         return SteelRecord.find { SteelTable.id eq id }
             .firstOrNull()
             ?.let { record ->
-                record.externalLinks().load()
+                record.externalLinks()
                 record.toDomain()
             }
     }
