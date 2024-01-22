@@ -6,12 +6,9 @@ import com.example.domain.repository.SteelRepository
 import java.util.UUID
 
 class ExposedSteelRepository : SteelRepository {
+
     override fun fetchSteelWithExternalLinks(id: UUID): Steel? {
         return SteelRecord.find { SteelTable.id eq id }
-            .firstOrNull()
-            ?.let { record ->
-                record.externalLinks()
-                record.toDomain()
-            }
+            .firstOrNull()?.toDomain()
     }
 }
