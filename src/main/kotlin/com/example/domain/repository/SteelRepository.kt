@@ -1,3 +1,11 @@
 package com.example.domain.repository
 
-interface SteelRepository
+import com.example.domain.datamodel.Steel
+import java.util.UUID
+
+interface SteelRepository {
+
+    fun fetchSteelWithExternalLinks(id: UUID): Steel? {
+        return null
+    }
+}

@@ -59,7 +59,7 @@ class SteelRecord(id: EntityID<UUID>) : UUIDEntity(id) {
         )
     }
 
-    private fun externalLinks(): List<ExternalLinkRecord> {
+    fun externalLinks(): List<ExternalLinkRecord> {
         return ExternalLinkRecord.find { ExternalLinkTable.steelId eq id }.toList()
     }
 }
