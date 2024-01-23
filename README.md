@@ -10,7 +10,8 @@ A simple application to store data about popular steel alloys and their general 
 ## Guides to installing required software
 1) Java: [SDKman Install](https://sdkman.io/install) [Java Install](https://sdkman.io/usage)
 2) Docker: [Docker Desktop](https://www.docker.com/products/docker-desktop/) *or* [Colima](https://formulae.brew.sh/formula/colima)
-   (personally I use Colima as it is lighter weight, still uses the same commands)
+   (personally I use Colima as it is lighter weight, still uses the same commands for docker but doesn't require running 
+a resource intensive desktop app)
 
 
 ## Getting Started

@@ -1,7 +1,7 @@
 -- Create the 'steels' table
 CREATE TABLE steels (
                         id UUID PRIMARY KEY,
-                        created_at = TIMESTAMPTZ,
+                        created_at TIMESTAMPTZ,
                         name VARCHAR(255),
                         manufacturer VARCHAR(255),
                         data_sheet VARCHAR(255),
@@ -17,7 +17,7 @@ CREATE TABLE steels (
 -- Create a table for the linked entries
 CREATE TABLE external_links (
                                 linked_id UUID PRIMARY KEY,
-                                created_at = TIMESTAMPTZ,
+                                created_at TIMESTAMPTZ,
                                 steels_id UUID REFERENCES steels(id),
                                 link_value VARCHAR(255),
                                 is_active BOOLEAN DEFAULT TRUE

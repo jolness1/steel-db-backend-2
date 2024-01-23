@@ -1,8 +1,6 @@
 package com.example.plugins
 
-import SteelTable
 import com.example.domain.exposed.ExposedSteelRepository
-import com.example.domain.repository.SteelRepository
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
@@ -19,13 +17,16 @@ fun Application.configureRouting() {
             call.respondText("Hello World!")
         }
 
+        // search by id
         get("/steel/{id}") {
             val steelId = call.parameters.getOrFail<UUID>("id")
-            val steel = ExposedSteelRepository().fetchSteelWithExternalLinks(steelId)
-                ?: return@get call.respond(HttpStatusCode.NotFound)
+            val steel = ExposedSteelRepository().fetchSteelWithExternalLinks(steelId) ?: return@get call.respond(
+                HttpStatusCode.NotFound
+            )
             call.respond(steel)
         }
 
+        // Returns list of steels that match the string. ie S3 will return S30V and S35VN
         get("/steels/{name}") {
             val nameQuery = call.request.queryParameters["name"] ?: return@get call.respond(HttpStatusCode.BadRequest)
             val matchingSteels = ExposedSteelRepository().fetchSteelByName(nameQuery)
