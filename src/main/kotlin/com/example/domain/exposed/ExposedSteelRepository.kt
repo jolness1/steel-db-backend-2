@@ -25,7 +25,7 @@ class ExposedSteelRepository : SteelRepository {
             }
 
             steel.externalLinks.forEach { externalLink ->
-                ExternalLinkRecord.new{
+                ExternalLinkRecord.new {
                     steelId = createdSteelRecord.id
                     linkValue = externalLink.linkValue
                     isActive = externalLink.isActive
