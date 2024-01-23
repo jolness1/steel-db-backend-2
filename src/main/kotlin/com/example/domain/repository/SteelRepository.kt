@@ -5,9 +5,13 @@ import java.util.UUID
 
 interface SteelRepository {
 
-    fun fetchSteelWithExternalLinks(id: UUID): Steel? {
-        return null
-    }
+    fun createSteel(): Steel
+
+    fun updateSteel(): Steel
+
+    fun deleteSteel()
+
+    fun fetchSteelWithExternalLinks(id: UUID): Steel?
 
     fun fetchSteelByName(nameQuery: String): List<Steel>
 }
