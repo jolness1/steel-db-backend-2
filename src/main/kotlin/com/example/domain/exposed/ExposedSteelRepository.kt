@@ -4,12 +4,14 @@ import SteelRecord
 import com.example.domain.datamodel.Steel
 import com.example.domain.repository.SteelRepository
 import com.example.domain.table.ExternalLinkRecord
+import com.example.domain.table.ExternalLinkTable
+import com.example.exceptions.SteelException
 import java.util.UUID
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class ExposedSteelRepository : SteelRepository {
 
-    fun createSteel(steel: Steel): Steel {
+    override fun createSteel(steel: Steel): Steel {
         return transaction {
             val createdSteelRecord = SteelRecord.new {
                 name = steel.name
@@ -32,7 +34,7 @@ class ExposedSteelRepository : SteelRepository {
                 }
             }
 
-            createdSteelRecord.toDomain() // Convert record back to domain object
+            createdSteelRecord.toDomain()
         }
     }
 
@@ -41,8 +43,13 @@ class ExposedSteelRepository : SteelRepository {
 
     }
 
-    override fun deleteSteel(): {
-
+    override fun deleteSteel(id: UUID): Steel{
+        return transaction {
+            val steelRecord = SteelRecord.findById(id) ?: throw SteelException.NotFound(id)
+            ExternalLinkRecord.find { ExternalLinkTable.steelId eq id }.forEach { it.delete() }
+            steelRecord.delete()
+            steelRecord.toDomain()
+        }
     }
 
     override fun fetchSteelWithExternalLinks(id: UUID): Steel? {

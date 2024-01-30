@@ -5,11 +5,11 @@ import java.util.UUID
 
 interface SteelRepository {
 
-    fun createSteel(): Steel
+    fun createSteel(steel: Steel): Steel
 
     fun updateSteel(): Steel
 
-    fun deleteSteel()
+    fun deleteSteel(id: UUID): Steel
 
     fun fetchSteelWithExternalLinks(id: UUID): Steel?
 
