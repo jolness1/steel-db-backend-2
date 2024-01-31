@@ -7,7 +7,7 @@ interface SteelRepository {
 
     fun createSteel(steel: Steel): Steel
 
-    fun updateSteel(): Steel
+    fun updateSteel(id: UUID, updates: Map<String, Any?>): Steel
 
     fun deleteSteel(id: UUID): Steel
 

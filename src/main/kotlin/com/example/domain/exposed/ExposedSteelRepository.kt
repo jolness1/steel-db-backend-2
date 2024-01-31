@@ -8,6 +8,7 @@ import com.example.domain.table.ExternalLinkTable
 import com.example.exceptions.SteelException
 import java.util.UUID
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.update
 
 class ExposedSteelRepository : SteelRepository {
 
@@ -39,11 +40,57 @@ class ExposedSteelRepository : SteelRepository {
     }
 
 
-    override fun updateSteel(): Steel {
+    override fun updateSteel(id: UUID, updates: Map<String, Any?>): Steel {
+        return transaction {
+            val steelRecord = SteelRecord.findById(id) ?: throw SteelException.NotFound(id)
 
+            SteelTable.update({ SteelTable.id eq id }) {
+                updates.forEach { (fieldName, value) ->
+                    when (fieldName) {
+                        "name" -> it[name] = value as? String ?: steelRecord.name
+                        "manufacturer" -> it[manufacturer] = value as? String ?: steelRecord.manufacturer
+                        "dataSheet" -> it[dataSheet] = value as String?
+                        "history" -> it[history] = value as String?
+                        "description" -> it[description] = value as String?
+                        "edgeRetention" -> it[edgeRetention] = value as Int?
+                        "stainless" -> it[stainless] = value as Int?
+                        "toughness" -> it[toughness] = value as Int?
+                        "sharpening" -> it[sharpening] = value as Int?
+                        "particleMetallurgy" -> it[particleMetallurgy] = value as Boolean?
+                        "externalLinks" -> {
+                            // Handle updating or creating external links
+                            val updatedLinks = value as List<Map<String, Any?>>
+                            for (updatedLink in updatedLinks) {
+                                val linkId = updatedLink["id"] as UUID?
+                                var linkValue = updatedLink["linkValue"] as String?
+                                var isActive = updatedLink["isActive"] as Boolean?
+
+                                if (linkId != null) {
+                                    // Update existing link if it currently exists
+                                    val existingLink = ExternalLinkRecord.findById(linkId) ?: continue
+                                    if (linkValue != null) existingLink.linkValue = linkValue
+                                    if (isActive != null) existingLink.isActive = isActive
+                                    existingLink.flush()
+                                } else {
+                                    // Create new link if none exists
+                                    ExternalLinkRecord.new {
+                                        steelId = steelRecord.id
+                                        linkValue = linkValue ?: ""
+                                        isActive = isActive ?: true
+                                    }.flush()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            steelRecord.refresh()
+            steelRecord.toDomain()
+        }
     }
 
-    override fun deleteSteel(id: UUID): Steel{
+
+    override fun deleteSteel(id: UUID): Steel {
         return transaction {
             val steelRecord = SteelRecord.findById(id) ?: throw SteelException.NotFound(id)
             ExternalLinkRecord.find { ExternalLinkTable.steelId eq id }.forEach { it.delete() }
